@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import axios from 'axios';
-import { HashRouter as Router, Route } from 'react-router-dom'
+import { HashRouter as Router, Route, Link } from 'react-router-dom'
 import AllAlbums from './AllAlbums';
 import SingleAlbum from './SingleAlbum';
 import Sidebar from './Sidebar';
@@ -8,16 +7,13 @@ import Player from './Player';
 
 export default class Main extends Component {
 
-  constructor (props) {
+  constructor(props) {
     super(props);
-    this.state = {
-      selectedAlbum: {}
-    };
     this.selectAlbum = this.selectAlbum.bind(this);
     this.deselectAlbum = this.deselectAlbum.bind(this);
   }
 
-  selectAlbum (albumId) {
+  selectAlbum(albumId) {
     axios.get(`/api/albums/${albumId}`)
       .then(res => res.data)
       .then(album => this.setState({
@@ -25,30 +21,25 @@ export default class Main extends Component {
       }));
   }
 
-  deselectAlbum () {
-    this.setState({ selectedAlbum: {}});
+  deselectAlbum() {
+    this.setState({ selectedAlbum: {} });
   }
 
-  render () {
+  render() {
     return (
-      <div id="main" className="container-fluid">
-        <div className="col-xs-2">
-          <Sidebar deselectAlbum={this.deselectAlbum} />
-        </div>
-        <Router>
-          <div className="col-xs-10">
-            <Route exact path='/' component={AllAlbums}></Route>
-            <Route exact path='/albums' component={AllAlbums}></Route>
-            <Route path='/albums/:albumId' component={SingleAlbum}></Route>
-
-
-            
+      <Router>
+        <div id="main" className="container-fluid">
+          <div className="col-xs-2">
+            <Sidebar deselectAlbum={this.deselectAlbum} />
           </div>
-        </Router>  
-           
-        
-        <Player />
-      </div>
+          <div className="col-xs-10">
+            <Route exact path="/" component={AllAlbums} />
+            <Route exact path="/albums" component={AllAlbums} />
+            <Route path="albums/:albumId" component={SingleAlbum} />
+          </div>
+          <Player />
+        </div>
+      </Router>
     );
   }
 }
